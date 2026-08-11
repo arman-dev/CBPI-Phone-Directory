@@ -63,9 +63,10 @@ body:has(.app){
 .hero-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0}
 .logo-wrap{display:flex;align-items:center;gap:10px;flex:1 1 auto;min-width:0}
 .logo{
-  width:44px;height:44px;border-radius:12px;
-  background:#fff;padding:4px;object-fit:contain;flex-shrink:0;
-  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  width:52px;height:52px;border-radius:50%;
+  object-fit:contain;flex-shrink:0;
+  background:transparent;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,0.18));
 }
 .title-block{min-width:0;flex:1 1 auto;overflow:hidden}
 .logo-wrap h1{

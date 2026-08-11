@@ -319,13 +319,58 @@ if ($btnInstall) $btnInstall.addEventListener("click", async ()=>{
     deferredPrompt=null; $btnInstall.style.display="none";
 });
 
-/* ---------- Service Worker ---------- */
+/* ---------- Service Worker (aggressive auto-update, no user prompt needed) ---------- */
 function registerSW() {
     if (!("serviceWorker" in navigator)) return;
     if (location.protocol === "file:") return;
-    window.addEventListener("load", ()=>{
-        navigator.serviceWorker.register("sw.js").catch(err=>console.warn("SW fail",err));
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("sw.js").then(reg => {
+            // Check for updates every 15 minutes
+            setInterval(() => reg.update(), 15 * 60 * 1000);
+            // Also when page becomes visible again
+            document.addEventListener("visibilitychange", () => { if (!document.hidden) reg.update(); });
+            // Auto-reload when a new SW is installed and takes control
+        }).catch(err => console.warn("SW fail", err));
+
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+            if (refreshing) return;
+            refreshing = true;
+            window.location.reload();
+        });
+        navigator.serviceWorker.addEventListener("message", e => {
+            if (e.data && e.data.type === "SW_UPDATED") {
+                if (!refreshing) { refreshing = true; window.location.reload(); }
+            }
+        });
+        // When new SW installs and reaches waiting state, auto-skip to avoid "stuck waiting SW"
+        navigator.serviceWorker.ready.then(reg => {
+            if (reg.waiting) reg.waiting.postMessage({type:"SKIP_WAITING"});
+            reg.addEventListener("updatefound", () => {
+                if (reg.installing) {
+                    reg.installing.addEventListener("statechange", () => {
+                        if (reg.installing.state === "installed" && navigator.serviceWorker.controller) {
+                            reg.installing.postMessage({type:"SKIP_WAITING"});
+                        }
+                    });
+                }
+            });
+        });
     });
+}
+
+function showUpdateBanner(onConfirm) {
+    if (document.getElementById("__updateBanner")) return;
+    const b = document.createElement("div");
+    b.id = "__updateBanner";
+    b.innerHTML = `<span>🔄 নতুন ভার্সন পাওয়া গেছে</span><button>আপডেট করুন</button>`;
+    b.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:99999;background:#1565c0;color:#fff;padding:10px 16px;font-size:.85rem;display:flex;align-items:center;justify-content:center;gap:12px;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,.25);width:100%;max-width:var(--app-max,680px);margin:0 auto;";
+    const btn = b.querySelector("button");
+    btn.style.cssText = "background:#fff;color:#1565c0;border:none;padding:6px 14px;border-radius:20px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.82rem;flex-shrink:0;";
+    btn.addEventListener("click", () => { b.remove(); onConfirm(); });
+    document.body.appendChild(b);
+    const app = document.querySelector(".app");
+    if (app) app.style.marginTop = "44px";
 }
 
 window.callNumber = callNumber;

@@ -1,5 +1,5 @@
-/* CBPI Directory - Service Worker v24 - final clean release */
-const CACHE = "cbpi-dir-v24";
+/* CBPI Directory - Service Worker v28 - logo with white bg */
+const CACHE = "cbpi-dir-v28";
 const CORE = [
   "./",
   "./index.html",
@@ -32,19 +32,26 @@ for (let i = 101; i <= 126; i++) {
 const ALL_ASSETS = [...CORE, ...TEACHER_IMAGES, ...STAFF_IMAGES];
 
 self.addEventListener("install", (e) => {
+  // Immediately take control — don't wait for tabs to close
+  self.skipWaiting();
   e.waitUntil(
     caches.open(CACHE).then(cache =>
       cache.addAll(ALL_ASSETS).catch(err => console.warn("[SW] pre-cache partial:", err))
-    ).then(() => self.skipWaiting())
+    )
   );
 });
 
 self.addEventListener("activate", (e) => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
-  );
+  e.waitUntil((async () => {
+    // Delete old caches
+    const keys = await caches.keys();
+    await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
+    // Claim all open tabs immediately
+    await self.clients.claim();
+    // Reload all open tabs
+    const clients = await self.clients.matchAll({ includeUncontrolled: true });
+    clients.forEach(c => c.postMessage({ type: "SW_UPDATED" }));
+  })());
 });
 
 self.addEventListener("fetch", (e) => {
