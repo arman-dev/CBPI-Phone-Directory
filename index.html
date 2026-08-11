@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="theme-color" content="#009578">
+<meta name="description" content="কক্সবাজার সরকারি পলিটেকনিক ইনস্টিটিউট - অফলাইন ফোন ডিরেক্টরি">
+<title>CBPI Phone Directory</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="images/icons/icon-192.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- Scrollable middle region -->
+  <main class="scroll-area" id="scrollArea">
+
+    <!-- Section 1: hero (title + logo + share) — SCROLLS AWAY -->
+    <div class="hero-band">
+      <div class="hero-top">
+        <div class="logo-wrap">
+          <img src="images/logo.png" alt="CBPI" class="logo" onerror="this.style.display='none'">
+          <div class="title-block">
+            <h1>CBPI Phone Directory</h1>
+            <small>কক্সবাজার সরকারি পলিটেকনিক ইনস্টিটিউট</small>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button id="btnShare" title="শেয়ার করুন"><i class="fa-solid fa-share-nodes"></i></button>
+          <button id="btnInstall" title="ইনস্টল করুন" style="display:none"><i class="fa-solid fa-download"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: search + tabs — STICKS TO TOP while scrolling -->
+    <div class="sticky-band">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="নাম, পদবী বা নম্বর দিয়ে খুঁজুন...">
+        <button id="btnClear" class="clear-btn" style="display:none"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="tabs" id="tabs"></div>
+    </div>
+
+    <!-- Section 3: zoom bar — SCROLLS AWAY too -->
+    <div class="zoom-band">
+      <div class="zoom-bar">
+        <span><i class="fa-solid fa-text-height"></i></span>
+        <button id="zoomOut" title="ছোট করুন"><i class="fa-solid fa-minus"></i></button>
+        <span id="zoomVal" class="zoom-val">100%</span>
+        <button id="zoomIn" title="বড় করুন"><i class="fa-solid fa-plus"></i></button>
+        <span class="zoom-note">Not based on seniority.</span>
+        <button id="btnTop" title="উপরে যান"><i class="fa-solid fa-arrow-up"></i></button>
+      </div>
+    </div>
+
+    <!-- Contacts list (scrolls normally) -->
+    <div class="contacts" id="contacts"></div>
+
+    <div id="empty" class="empty" style="display:none">
+      <i class="fa-solid fa-user-slash"></i>
+      <p>কোনো কন্টাক্ট পাওয়া যায়নি</p>
+    </div>
+
+  </main>
+
+  <!-- Pinned footer (always at bottom) -->
+  <footer class="footer">
+    <small>Developed by Mohammad Arman · AI-Assisted</small>
+  </footer>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

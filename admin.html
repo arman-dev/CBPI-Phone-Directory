@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="robots" content="noindex,nofollow">
+<title>CBPI Admin Panel</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+  body{ background:#f5f7fa; }
+  .admin-shell{ max-width:900px; margin:0 auto; padding:16px; padding-bottom:80px; }
+  .admin-header{ display:flex; align-items:center; gap:12px; padding:14px 16px; background:linear-gradient(135deg,#009578,#00b894); color:#fff; border-radius:14px; margin-bottom:16px; box-shadow:0 8px 20px rgba(0,149,120,0.25); }
+  .admin-header .logo{ width:42px; height:42px; border-radius:12px; background:rgba(255,255,255,0.2); display:flex;align-items:center;justify-content:center; font-size:1.1rem; }
+  .admin-header h1{ margin:0; font-size:1.1rem; }
+  .admin-header small{ opacity:.85; font-size:.75rem; }
+  .admin-header .spacer{ flex:1; }
+  .pill-btn{ padding:8px 14px; border-radius:20px; border:none; background:rgba(255,255,255,0.2); color:#fff; cursor:pointer; font-family:inherit; font-size:.82rem; font-weight:600; }
+  .pill-btn:hover{ background:rgba(255,255,255,0.3); }
+  .admin-tabs{ display:flex; gap:6px; background:#fff; border-radius:12px; padding:6px; margin-bottom:16px; overflow-x:auto; box-shadow:var(--shadow); }
+  .admin-tabs button{ flex:1; padding:10px 12px; border:none; background:transparent; border-radius:8px; font-family:inherit; font-size:.85rem; font-weight:600; color:var(--muted); cursor:pointer; white-space:nowrap; }
+  .admin-tabs button.active{ background:var(--primary); color:#fff; }
+  .card{ background:#fff; border-radius:14px; padding:18px; box-shadow:var(--shadow); margin-bottom:14px; }
+  .card h2{ margin:0 0 12px; font-size:1rem; color:var(--primary); display:flex; align-items:center; gap:8px; }
+  .card p.muted{ color:var(--muted); font-size:.82rem; margin:-6px 0 12px; }
+  label{ display:block; font-size:.82rem; color:var(--muted); margin-bottom:10px; }
+  input,select,textarea{ width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:10px; font-size:.95rem; background:var(--bg); font-family:inherit; color:var(--text); margin-top:5px; box-sizing:border-box; }
+  input:focus,select:focus{ outline:none; border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-light); }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .btn{ padding:10px 18px; border-radius:10px; border:none; font-size:.9rem; font-family:inherit; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; text-decoration:none; }
+  .btn:active{ transform:scale(.95); }
+  .btn-primary{ background:var(--primary); color:#fff; }
+  .btn-primary:hover{ background:#007d65; }
+  .btn-secondary{ background:var(--bg); color:var(--text); border:1px solid var(--border); }
+  .btn-danger{ background:#e53935; color:#fff; }
+  .btn-danger:hover{ background:#c62828; }
+  .btn-sm{ padding:6px 12px; font-size:.78rem; border-radius:8px; }
+  .btn-success{ background:#2e7d32; color:#fff; }
+  .btn-warn{ background:#ef6c00; color:#fff; }
+  .row-actions{ display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap; margin-top:8px; }
+  .preview-img{ width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid var(--border); }
+  .preview-row{ display:flex; align-items:center; gap:10px; margin:6px 0 12px; font-size:.82rem; color:var(--muted); }
+  .stat-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
+  .stat{ background:var(--bg); border-radius:10px; padding:12px; text-align:center; }
+  .stat b{ display:block; font-size:1.3rem; color:var(--primary); }
+  .stat span{ font-size:.75rem; color:var(--muted); }
+  table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  th,td{ padding:8px 6px; text-align:left; border-bottom:1px solid var(--border); vertical-align:middle; }
+  th{ font-size:.75rem; color:var(--muted); text-transform:uppercase; font-weight:600; }
+  .mini-avatar{ width:36px; height:36px; border-radius:50%; background:#009578; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:.9rem; overflow:hidden; flex-shrink:0; }
+  .mini-avatar img{ width:100%; height:100%; object-fit:cover; }
+  .contact-row{ display:flex; align-items:center; gap:10px; }
+  .contact-row .info{ flex:1; min-width:0; }
+  .contact-row .info h4{ margin:0; font-size:.88rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .contact-row .info small{ color:var(--muted); font-size:.72rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
+  .tag{ display:inline-block; padding:2px 8px; border-radius:10px; font-size:.7rem; font-weight:600; }
+  .tag-archived{ background:#eee; color:#777; }
+  .tag-local{ background:#e8f5e9; color:#2e7d32; }
+  .warn{ background:#fff3e0; color:#e65100; padding:12px; border-radius:10px; font-size:.85rem; margin-bottom:14px; }
+  .search-inline{ position:relative; margin-bottom:12px; }
+  .search-inline i{ position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); }
+  .search-inline input{ padding-left:36px; }
+  .dept-legend{ font-size:.78rem; color:var(--muted); margin-top:8px; }
+  .archived-row{ opacity:.65; }
+  .archived-row h4{ text-decoration:line-through; }
+  .edit-form{ background:var(--bg); padding:14px; border-radius:12px; margin-top:10px; display:none; }
+  .edit-form.open{ display:block; }
+  .notice{ background:#e3f2fd; color:#1565c0; padding:10px 12px; border-radius:10px; font-size:.82rem; margin-bottom:12px; }
+</style>
+</head>
+<body>
+<div class="admin-shell">
+  <div class="admin-header">
+    <div class="logo"><i class="fa-solid fa-gear"></i></div>
+    <div>
+      <h1>CBPI Admin Panel</h1>
+      <small>নতুন যোগ · এডিট · আর্কাইভ · data.js ডাউনলোড</small>
+    </div>
+    <div class="spacer"></div>
+    <a href="index.html" class="pill-btn"><i class="fa-solid fa-arrow-left"></i> ডিরেক্টরিতে ফিরুন</a>
+  </div>
+
+  <div class="admin-tabs">
+    <button class="active" data-tab="dashboard"><i class="fa-solid fa-gauge-high"></i> ড্যাশবোর্ড</button>
+    <button data-tab="add"><i class="fa-solid fa-plus"></i> নতুন যোগ</button>
+    <button data-tab="manage"><i class="fa-solid fa-list-check"></i> ম্যানেজ</button>
+    <button data-tab="download"><i class="fa-solid fa-download"></i> data.js</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="pane" data-pane="dashboard">
+    <div class="card">
+      <h2><i class="fa-solid fa-chart-simple"></i> সারসংক্ষেপ</h2>
+      <div class="stat-row" id="stats"></div>
+      <div class="notice">
+        <b>ব্যবহারবিধি:</b> নতুন কন্টাক্ট যোগ করে "তালিকায় যোগ করুন" চাপুন → সব শেষে <b>data.js</b> ট্যাবে গিয়ে "💾 data.js ডাউনলোড" চাপুন → ডাউনলোড হওয়া ফাইল দিয়ে পুরনো <code>data.js</code> রিপ্লেস করুন → <code>push.bat</code> চাপুন।
+      </div>
+    </div>
+    <div class="card">
+      <h2><i class="fa-solid fa-bolt"></i> দ্রুত অ্যাকশন</h2>
+      <div class="row-actions">
+        <button class="btn btn-primary" onclick="switchTab('add')"><i class="fa-solid fa-plus"></i> নতুন কন্টাক্ট যোগ</button>
+        <button class="btn btn-secondary" onclick="switchTab('manage')"><i class="fa-solid fa-box-archive"></i> আর্কাইভ ম্যানেজ</button>
+        <button class="btn btn-success" onclick="switchTab('download')"><i class="fa-solid fa-download"></i> data.js ডাউনলোড</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add -->
+  <div class="pane" data-pane="add" style="display:none">
+    <div class="card">
+      <h2><i class="fa-solid fa-user-plus"></i> নতুন কন্টাক্ট যোগ করুন</h2>
+      <p class="muted">সব তথ্য দিয়ে নিচের "তালিকায় যোগ করুন" চাপুন। পরে data.js ট্যাব থেকে ফাইল ডাউনলোড করুন।</p>
+      <form id="addForm">
+        <div class="form-row">
+          <label>নাম (বাংলা) *
+            <input name="bn_name" required placeholder="যেমন: মোঃ রহিম উদ্দিন">
+          </label>
+          <label>নাম (ইংরেজি)
+            <input name="name" placeholder="Md. Rahim Uddin">
+          </label>
+        </div>
+        <div class="form-row">
+          <label>ক্যাটাগরি *
+            <select name="category" id="f_cat" required>
+              <option value="teacher">শিক্ষক</option>
+              <option value="staff">কর্মচারী/স্টাফ</option>
+              <option value="administration">প্রশাসন</option>
+            </select>
+          </label>
+          <label>বিভাগ *
+            <select name="dept_key" id="f_dept" required>
+              <option value="administration">প্রশাসন</option>
+              <option value="civil">সিভিল</option>
+              <option value="computer">কম্পিউটার</option>
+              <option value="electrical">ইলেকট্রিক্যাল</option>
+              <option value="rac">আরএসি</option>
+              <option value="food">ফুড</option>
+              <option value="tourism">ট্যুরিজম</option>
+              <option value="nontech">নন-টেক</option>
+              <option value="office">কর্মচারী/অফিস</option>
+            </select>
+          </label>
+        </div>
+        <label>পদবি (বাংলা) *
+          <select name="bn_designation" id="f_desig" required>
+            <optgroup label="প্রশাসন">
+              <option value="অধ্যক্ষ">অধ্যক্ষ</option>
+              <option value="উপাধ্যক্ষ">উপাধ্যক্ষ</option>
+              <option value="রেজিস্ট্রার">রেজিস্ট্রার</option>
+            </optgroup>
+            <optgroup label="শিক্ষক">
+              <option value="চিফ ইনস্ট্রাক্টর">চিফ ইনস্ট্রাক্টর / বিভাগীয় প্রধান</option>
+              <option value="ইনস্ট্রাক্টর">ইনস্ট্রাক্টর</option>
+              <option value="জুনিয়র ইনস্ট্রাক্টর">জুনিয়র ইনস্ট্রাক্টর</option>
+              <option value="ক্রাফট ইনস্ট্রাক্টর">ক্রাফট ইনস্ট্রাক্টর</option>
+              <option value="ল্যাব সহকারী">ল্যাব সহকারী</option>
+              <option value="ফিজিক্যাল এডুকেশন ইনস্ট্রাক্টর">ফিজিক্যাল এডু ইনস্ট্রাক্টর</option>
+            </optgroup>
+            <optgroup label="স্টাফ">
+              <option value="প্রধান সহকারী">প্রধান সহকারী</option>
+              <option value="হিসাবরক্ষক">হিসাবরক্ষক</option>
+              <option value="স্টোর কিপার">স্টোর কিপার</option>
+              <option value="কেয়ারটেকার">কেয়ারটেকার</option>
+              <option value="ইলেকট্রিশিয়ান কাম পাম্প অপারেটর">ইলেকট্রিশিয়ান-কাম-পাম্প অপারেটর</option>
+              <option value="ডাটা প্রসেসর">ডাটা প্রসেসর</option>
+              <option value="ক্যাশিয়ার">ক্যাশিয়ার</option>
+              <option value="ক্যাশ সরকার">ক্যাশ সরকার</option>
+              <option value="নিরাপত্তা প্রহরী">নিরাপত্তা প্রহরী</option>
+              <option value="ক্লিনার">ক্লিনার</option>
+              <option value="সুইপার">সুইপার</option>
+            </optgroup>
+          </select>
+        </label>
+        <div class="form-row">
+          <label>মোবাইল *
+            <input type="tel" name="mobile" required placeholder="01XXXXXXXXX" pattern="01[3-9][0-9]{8}">
+          </label>
+          <label>ইমেইল
+            <input type="email" name="email" placeholder="name@example.com">
+          </label>
+        </div>
+        <label>ছবি (auto-resize to 200px)
+          <input type="file" name="image" id="f_img" accept="image/*">
+        </label>
+        <div class="preview-row" id="f_preview" style="display:none"></div>
+        <div class="row-actions">
+          <button type="reset" class="btn btn-secondary">রিসেট</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> তালিকায় যোগ করুন</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Manage -->
+  <div class="pane" data-pane="manage" style="display:none">
+    <div class="card">
+      <h2><i class="fa-solid fa-list-check"></i> সব কন্টাক্ট ম্যানেজ</h2>
+      <div class="search-inline"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="m_search" placeholder="নাম/নম্বর/পদবি দিয়ে খুঁজুন..."></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;font-size:.8rem;margin-bottom:10px">
+        <label><input type="checkbox" id="m_showActive" checked> সক্রিয়</label>
+        <label><input type="checkbox" id="m_showArch" checked> আর্কাইভ</label>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="m_table">
+          <thead><tr><th></th><th>নাম</th><th>বিভাগ</th><th>নম্বর</th><th style="text-align:right">অ্যাকশন</th></tr></thead>
+          <tbody id="m_tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Download -->
+  <div class="pane" data-pane="download" style="display:none">
+    <div class="card">
+      <h2><i class="fa-solid fa-file-arrow-down"></i> data.js ডাউনলোড</h2>
+      <p class="muted">এখান থেকে নতুন data.js ফাইল ডাউনলোড করে পুরনোটা রিপ্লেস করুন, তারপর push.bat চাপুন।</p>
+      <div id="dl_stats" class="stat-row"></div>
+      <div class="warn">
+        <b>⚠️ গুরুত্বপূর্ণ:</b> এই অ্যাডমিন প্যানেলে যোগ/এডিট/আর্কাইভ করা সবকিছু শুধু আপনার ব্রাউজারের মেমরিতে (localStorage) থাকে — ডাউনলোড না করা পর্যন্ত data.js-এ লেখা হয় না। সব শেষে অবশ্যই data.js ডাউনলোড করে রিপ্লেস করুন।
+      </div>
+      <div class="row-actions">
+        <button class="btn btn-success" id="btnDownload" onclick="downloadData()"><i class="fa-solid fa-download"></i> 💾 data.js ডাউনলোড</button>
+        <button class="btn btn-secondary" id="btnResetLocal" onclick="resetSession()"><i class="fa-solid fa-rotate-left"></i> সেশন রিসেট (localStorage সাফ)</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><i class="fa-solid fa-code-compare"></i> JSON ব্যাকআপ (অপশনাল)</h2>
+      <p class="muted">শুধু আপনার করা নতুন পরিবর্তনগুলোর JSON ব্যাকআপ নিতে চাইলে — যাতে অন্য ব্রাউজারে আনতে পারেন।</p>
+      <div class="row-actions">
+        <button class="btn btn-secondary" onclick="exportJSON()"><i class="fa-solid fa-file-export"></i> JSON এক্সপোর্ট</button>
+        <label class="btn btn-secondary" style="cursor:pointer">
+          <i class="fa-solid fa-file-import"></i> JSON ইমপোর্ট
+          <input type="file" id="impFile" accept=".json" style="display:none">
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
