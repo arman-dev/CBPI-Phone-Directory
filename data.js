@@ -1,5 +1,5 @@
 // CBPI Contact Data
-// Generated: ১২/৮/২০২৬, ৪:৪৪:৩৩ AM
+// Generated: ১২/৮/২০২৬, ৫:৫৭:৪৩ AM
 // প্রতিটি এন্ট্রিতে: sl, category(teacher|staff|administration), bn_name, name, bn_designation, designation, department, dept_key, mobile, email, image, archived(true/false)
 window.CONTACTS = [
   {
@@ -488,7 +488,7 @@ window.CONTACTS = [
     "category": "teacher",
     "bn_name": "সেলিম রেজা",
     "name": "Selim Reza",
-    "bn_designation": "ইনস্ট্রাক্টর (টেক), ফুড",
+    "bn_designation": "ইনস্ট্রাক্টর ও বিভাগীয় প্রধান (১ম শিফট), ফুড",
     "designation": "Instructor (Tech), Food",
     "department": "ফুড টেকনোলজি",
     "dept_key": "food",
@@ -603,7 +603,7 @@ window.CONTACTS = [
   {
     "sl": 30,
     "category": "teacher",
-    "bn_name": "মো: আল-আমিন পোলাশ",
+    "bn_name": "মো: আল-আমিন",
     "name": "Md. Al-Amin Polash",
     "bn_designation": "জুনিয়র ইনস্ট্রাক্টর (টেক/ফুড)",
     "designation": "Junior Instructor (Tech/Food)",
