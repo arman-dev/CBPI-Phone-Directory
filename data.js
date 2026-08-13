@@ -1,5 +1,5 @@
 // CBPI Contact Data
-// Generated: ১২/৮/২০২৬, ৫:৫৭:৪৩ AM
+// Generated: ১৩/৮/২০২৬, ৪:১১:১১ PM
 // প্রতিটি এন্ট্রিতে: sl, category(teacher|staff|administration), bn_name, name, bn_designation, designation, department, dept_key, mobile, email, image, archived(true/false)
 window.CONTACTS = [
   {
@@ -721,7 +721,7 @@ window.CONTACTS = [
     "sl": 2,
     "category": "teacher",
     "bn_name": "আব্দুল্লাহ আল ফারুক",
-    "name": "Abdullah Al Faruk",
+    "name": "Abdullah Al Faruque",
     "bn_designation": "ইনস্ট্রাক্টর (টেক/ট্যুরিজম)",
     "designation": "Instructor (Tech/Tourism)",
     "department": "ট্যুরিজম অ্যান্ড হসপিটালিটি",
