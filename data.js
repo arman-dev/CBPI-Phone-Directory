@@ -1,5 +1,5 @@
 // CBPI Contact Data
-// Generated: ১৩/৮/২০২৬, ৪:১১:১১ PM
+// Generated: ১৬/৮/২০২৬, ৬:৪১:১০ PM
 // প্রতিটি এন্ট্রিতে: sl, category(teacher|staff|administration), bn_name, name, bn_designation, designation, department, dept_key, mobile, email, image, archived(true/false)
 window.CONTACTS = [
   {
@@ -735,7 +735,7 @@ window.CONTACTS = [
     "category": "teacher",
     "bn_name": "মোঃ শাহাদৎ হোসেন",
     "name": "Md. Shahadat Hossain",
-    "bn_designation": "জুনিয়র ইনস্ট্রাক্টর (টেক/ট্যুরিজম)",
+    "bn_designation": "ইনস্ট্রাক্টর (টেক/ট্যুরিজম)",
     "designation": "Junior Instructor (Tech/Tourism)",
     "department": "ট্যুরিজম অ্যান্ড হসপিটালিটি",
     "dept_key": "tourism",
